@@ -1,0 +1,66 @@
+#Based on template from: https://github.com/ThreeDeeJay/GitHub-Actions-build-templates/blob/main/Windows-CMake.yml
+name: Build
+
+env:
+  GH_TOKEN: "${{github.token}}"
+  Branch: "${{github.ref_name}}"
+  Artifacts: "build/Release"
+  Extension: "*" # "*.exe" # "*.dll"
+  Title: "${{github.event.repository.name}}"
+  Executable: "${{github.event.repository.name}}.exe" # *
+  CUDA_VERSION_MAJOR: "12"
+  CUDA_VERSION_MINOR: "9"
+  CUDA_VERSION_PATCH: "1"
+  CUDA_DRIVER_VERSION: "576.57"
+
+on:
+  push:
+    Branches: "$Branch"
+  pull_request:
+    Branches: "$Branch"
+  workflow_dispatch:
+
+jobs:
+  Build:
+    name: ${{matrix.Settings.Name}}-${{matrix.Configuration}}
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        Configuration: [Release] #[Release, Debug]
+        Settings:
+#        - {
+#            Name: "Win32",
+#            Platform: "Win32",
+#            Architecture: "x86",
+#            Triplet: "x86-windows"
+#          }
+        - {
+            Name: "Win64",
+            Platform: "x64",
+            Architecture: "x64",
+            Triplet: "x64-windows"
+          }
+          
+    steps:
+
+    - name: Clone repo and submodules
+      run: >
+        git
+        clone https://${{github.repository_owner}}:${{github.token}}@github.com/${{github.repository}}.git
+        "${{github.workspace}}"
+        --branch ${{env.Branch}}
+        --recurse-submodules
+        --depth 1
+
+    - name: Cache vcpkg
+      uses: actions/cache@v5
+      id: cache_vcpkg
+      with:
+        path: C:/vcpkg/installed
+        key: vcpkg
+    - name: vcpkg
+      if: steps.cache_vcpkg.outputs.cache-hit != 'true'
+      run: |
+        vcpkg install opencv --triplet ${{matrix.Settings.Triplet}}
+    - name: List vcpkg files
+      run: Get-ChildItem -Path "C:\vcpkg" -File -Recurse | Select-Object FullName
