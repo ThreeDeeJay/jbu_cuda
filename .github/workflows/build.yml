@@ -5,7 +5,7 @@ env:
   GH_TOKEN: "${{github.token}}"
   Branch: "${{github.ref_name}}"
   Artifacts: "build/Release"
-  Extension: "*" # "*.exe" # "*.dll"
+  Extension: "*.exe"
   Title: "${{github.event.repository.name}}"
   Executable: "${{github.event.repository.name}}.exe" # *
   CUDA_VERSION_MAJOR: "12"
@@ -168,10 +168,10 @@ jobs:
           name: ${{env.Title}}-Win64-Release
           path: Release/Win64/
 
-      - name: Deploy
-        run: |
-          cp "README.md" "Release/ReadMe.txt"
-          cp "LICENSE" "Release/License.txt"
+#      - name: Deploy
+#        run: |
+#          cp "README.md" "Release/ReadMe.txt"
+#          cp "LICENSE" "Release/License.txt"
   
       - name: Compress artifacts
         run: |
