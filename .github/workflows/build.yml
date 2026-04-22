@@ -122,14 +122,11 @@ jobs:
     - name: List files
       run: Get-ChildItem -Path "." -File -Recurse | Select-Object FullName
 
-#    - name: Deploy
-#      shell: cmd
-#      run: |
-#        windeployqt.exe "${{github.workspace}}/${{env.Artifacts}}/${{env.Executable}}"
-#        If exist "vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll"       (copy "vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll"       "${{env.Artifacts}}")
-#        If exist "vcpkg_installed\${{matrix.Settings.Triplet}}\bin\*.dll"       (copy "vcpkg_installed\${{matrix.Settings.Triplet}}\bin\*.dll"       "${{env.Artifacts}}")
-#        If exist "vcpkg\installed\${{matrix.Settings.Triplet}}\debug\bin\*.dll" (copy "vcpkg\installed\${{matrix.Settings.Triplet}}\debug\bin\*.dll" "${{env.Artifacts}}")
-#        If exist "vcpkg_installed\${{matrix.Settings.Triplet}}\debug\bin\*.dll" (copy "vcpkg_installed\${{matrix.Settings.Triplet}}\debug\bin\*.dll" "${{env.Artifacts}}")
+    - name: Deploy
+      shell: cmd
+      run: |
+        If exist "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\debug\bin\*.dll" (copy "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\debug\bin\*.dll" "${{env.Artifacts}}")
+        If exist "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll"       (copy "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll"       "${{env.Artifacts}}")
 #        move "assets" "${{env.Artifacts}}"
 
     - name: Upload artifacts
