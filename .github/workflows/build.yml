@@ -5,7 +5,7 @@ env:
   GH_TOKEN: "${{github.token}}"
   Branch: "${{github.ref_name}}"
   Artifacts: "build/Release"
-  Extension: "*.exe"
+  Extension: "*"
   Title: "${{github.event.repository.name}}"
   Executable: "${{github.event.repository.name}}.exe" # *
   CUDA_VERSION_MAJOR: "12"
