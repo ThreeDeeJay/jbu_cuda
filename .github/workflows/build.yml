@@ -125,8 +125,7 @@ jobs:
     - name: Deploy
       shell: cmd
       run: |
-        If exist "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\debug\bin\*.dll" (copy "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\debug\bin\*.dll" "${{env.Artifacts}}")
-        If exist "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll"       (copy "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll"       "${{env.Artifacts}}")
+        move "C:\vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll" "${{env.Artifacts}}"
 #        move "assets" "${{env.Artifacts}}"
 
     - name: Upload artifacts
